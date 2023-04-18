@@ -16,12 +16,16 @@ import java.awt.event.MouseEvent;
 
 public class GamePanel extends JPanel {
     private Game game;
+    private JButton restartButton;
 
     public GamePanel() {
         game = new Game();
         game.start();
 
         setupMouseListeners();
+        setupRestartButton();
+        restartButton.setVisible(false);
+        add(restartButton);
 
         game.getGameLoopTimer().addActionListener(new ActionListener() {
             @Override
@@ -34,14 +38,19 @@ public class GamePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        for (Tower tower : game.getTowers()) {
-            tower.draw(g);
-        }
-        for (Enemy enemy : game.getEnemies()) {
-            enemy.draw(g);
-        }
 
-        drawKillCountAndMoney(g);
+        if(game.isGameOver()) {
+            drawGameOverScreen(g);
+        } else {
+            for (Tower tower : game.getTowers()) {
+                tower.draw(g);
+            }
+            for (Enemy enemy : game.getEnemies()) {
+                enemy.draw(g);
+            }
+
+            drawKillCountAndMoney(g);
+        }
     }
 
     public void addTower(int x, int y, String towerType) {
@@ -93,6 +102,25 @@ public class GamePanel extends JPanel {
                     game.upgradeSelectedTower();
                 }
             }
+        });
+    }
+
+    private void drawGameOverScreen(Graphics g) {
+        g.setColor(Color.RED);
+        g.setFont(new Font("Arial", Font.BOLD, 36));
+        g.drawString("Game Over", getWidth() / 2 - 100, getHeight() / 2 - 50);
+
+        // Make the restart button visible
+        restartButton.setVisible(true);
+    }
+
+    private void setupRestartButton() {
+        restartButton = new JButton("Restart Game");
+        restartButton.setBounds(getWidth() / 2 - 100, getHeight() / 2, 200, 50);
+        restartButton.addActionListener(e -> {
+            // Reset the game
+            game.reset();
+            restartButton.setVisible(false);
         });
     }
 }

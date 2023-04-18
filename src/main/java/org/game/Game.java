@@ -29,6 +29,8 @@ public class Game {
 
     private Tower selectedTower;
 
+    private boolean gameOver;
+
     public Game() {
         towers = new ArrayList<>();
         enemies = new ArrayList<>();
@@ -47,6 +49,8 @@ public class Game {
         availableMoney = 100;
 
         setupWaveTimer();
+
+        gameOver = false;
     }
 
     public void start() {
@@ -71,6 +75,9 @@ public class Game {
                     enemies.remove(enemies.get(i));
                 }
             }
+        }
+        if (enemies.size() > 100) {
+            gameOver = true;
         }
     }
 
@@ -175,15 +182,28 @@ public class Game {
     }
 
     private void setupWaveTimer() {
-        int waveDelay = 10000; // Example: 10 seconds between waves
+        int waveDelay = 5000; // Example: 5 seconds between waves
 
         waveTimer = new Timer(waveDelay, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                spawnWave(8);
+                spawnWave(20);
             }
         });
 
         waveTimer.start();
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void reset() {
+        enemies.clear();
+        towers.clear();
+        availableMoney = 100;
+        totalKills = 0;
+        gameOver = false;
+        waveTimer.restart();
     }
 }
