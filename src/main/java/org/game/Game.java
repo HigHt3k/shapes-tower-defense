@@ -21,8 +21,8 @@ public class Game {
     private static final int ENEMY_SPAWN_MARGIN = 50;
     private Random random;
 
-    private boolean waveInProgress;
     private Timer gameLoopTimer;
+    private Timer waveTimer;
 
     private int totalKills;
     private int availableMoney;
@@ -35,8 +35,6 @@ public class Game {
         running = false;
         random = new Random();
 
-        waveInProgress = false;
-
         // Set up the game loop timer
         gameLoopTimer = new Timer(1000 / 60, new ActionListener() {
             @Override
@@ -47,6 +45,8 @@ public class Game {
 
         totalKills = 0;
         availableMoney = 100;
+
+        setupWaveTimer();
     }
 
     public void start() {
@@ -70,14 +70,6 @@ public class Game {
                     enemyKilled(enemies.get(i));
                     enemies.remove(enemies.get(i));
                 }
-            }
-
-            // Check if the wave is cleared and spawn a new wave
-            if (!waveInProgress && enemies.isEmpty()) {
-                spawnWave(10);
-                waveInProgress = true;
-            } else if (waveInProgress && enemies.isEmpty()) {
-                waveInProgress = false;
             }
         }
     }
@@ -180,5 +172,18 @@ public class Game {
 
     public Tower getSelectedTower() {
         return selectedTower;
+    }
+
+    private void setupWaveTimer() {
+        int waveDelay = 10000; // Example: 10 seconds between waves
+
+        waveTimer = new Timer(waveDelay, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                spawnWave(8);
+            }
+        });
+
+        waveTimer.start();
     }
 }
