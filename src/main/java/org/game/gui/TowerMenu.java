@@ -14,6 +14,7 @@ public class TowerMenu extends JPanel {
         towerListModel.addElement("Basic Tower");
         towerListModel.addElement("Area Tower");
         towerListModel.addElement("Sniper Tower");
+        towerListModel.addElement("");
 
         towerList = new JList<>(towerListModel);
         towerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

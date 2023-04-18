@@ -50,9 +50,6 @@ public class Enemy {
     public void takeDamage(int damage) {
         // Apply resistances here if necessary
         health -= damage;
-        if (health <= 0) {
-            // Handle enemy death (e.g., remove from the list, add points, etc.)
-        }
     }
 
     public List<Enemy> getNeighbors(int radius) {
@@ -122,5 +119,9 @@ public class Enemy {
 
     public int getRange() {
         return range;
+    }
+
+    public int getMoneyOnKill() {
+        return 10; // Example: each enemy drops 10 money when killed. You can customize this value.
     }
 }

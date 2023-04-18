@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class GamePanel extends JPanel {
     private Game game;
@@ -18,6 +20,8 @@ public class GamePanel extends JPanel {
     public GamePanel() {
         game = new Game();
         game.start();
+
+        setupMouseListeners();
 
         game.getGameLoopTimer().addActionListener(new ActionListener() {
             @Override
@@ -36,6 +40,8 @@ public class GamePanel extends JPanel {
         for (Enemy enemy : game.getEnemies()) {
             enemy.draw(g);
         }
+
+        drawKillCountAndMoney(g);
     }
 
     public void addTower(int x, int y, String towerType) {
@@ -53,8 +59,40 @@ public class GamePanel extends JPanel {
             default:
                 return;
         }
-        game.addTower(tower);
+        if(tower.getCost() <= game.getAvailableMoney()) {
+            game.addTower(tower);
+            game.removeFromMoney(tower.getCost());
+        }
         repaint();
     }
 
+    private void drawKillCountAndMoney(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 14));
+
+        String killCountText = "Total kills: " + game.getTotalKills();
+        String availableMoneyText = "Available money: " + game.getAvailableMoney();
+
+        g.drawString(killCountText, 10, 20);
+        g.drawString(availableMoneyText, 10, 40);
+    }
+
+    private void setupMouseListeners() {
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                game.selectTower(e.getX(), e.getY());
+            }
+        });
+
+        // Example: Upgrade the selected tower with a right-click
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    game.upgradeSelectedTower();
+                }
+            }
+        });
+    }
 }

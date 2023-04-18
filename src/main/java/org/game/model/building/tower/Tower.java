@@ -67,7 +67,7 @@ public abstract class Tower extends Building {
         upgradeLevel++;
         range += range * upgradeRangeMultiplier;
         damage += damage * upgradeDamageMultiplier;
-        cost += cost * upgradeCostMultiplier;
+        upgradeCost += upgradeCost * upgradeCostMultiplier;
     }
 
     private boolean isEnemyInRange(Enemy enemy) {
@@ -109,5 +109,21 @@ public abstract class Tower extends Building {
         for (Projectile projectile : projectiles) {
             projectile.draw(g);
         }
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public int getUpgradeCost() {
+        return upgradeCost;
+    }
+
+    public boolean isClicked(int mouseX, int mouseY) {
+        int dx = mouseX - x;
+        int dy = mouseY - y;
+        int distanceSquared = dx * dx + dy * dy;
+
+        return distanceSquared <= range * range;
     }
 }

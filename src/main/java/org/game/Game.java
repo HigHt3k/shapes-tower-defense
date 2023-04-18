@@ -24,6 +24,11 @@ public class Game {
     private boolean waveInProgress;
     private Timer gameLoopTimer;
 
+    private int totalKills;
+    private int availableMoney;
+
+    private Tower selectedTower;
+
     public Game() {
         towers = new ArrayList<>();
         enemies = new ArrayList<>();
@@ -39,6 +44,9 @@ public class Game {
                 update();
             }
         });
+
+        totalKills = 0;
+        availableMoney = 100;
     }
 
     public void start() {
@@ -57,7 +65,12 @@ public class Game {
             }
 
             // Remove dead enemies
-            enemies.removeIf(enemy -> enemy.getHealth() <= 0);
+            for(int i = 0; i < enemies.size(); i++) {
+                if(enemies.get(i).getHealth() <= 0) {
+                    enemyKilled(enemies.get(i));
+                    enemies.remove(enemies.get(i));
+                }
+            }
 
             // Check if the wave is cleared and spawn a new wave
             if (!waveInProgress && enemies.isEmpty()) {
@@ -129,5 +142,43 @@ public class Game {
 
     public Timer getGameLoopTimer() {
         return gameLoopTimer;
+    }
+
+    public void enemyKilled(Enemy enemy) {
+        totalKills++;
+        availableMoney += enemy.getMoneyOnKill(); // Assume that the Enemy class has a getMoneyOnKill() method
+    }
+
+    public int getTotalKills() {
+        return totalKills;
+    }
+
+    public int getAvailableMoney() {
+        return availableMoney;
+    }
+
+    public void removeFromMoney(int money) {
+        availableMoney -= money;
+    }
+
+    public void selectTower(int x, int y) {
+        for (Tower tower : towers) {
+            if (tower.isClicked(x, y)) {
+                selectedTower = tower;
+                return;
+            }
+        }
+        selectedTower = null;
+    }
+
+    public void upgradeSelectedTower() {
+        if (selectedTower != null && availableMoney >= selectedTower.getUpgradeCost()) {
+            availableMoney -= selectedTower.getUpgradeCost();
+            selectedTower.upgrade();
+        }
+    }
+
+    public Tower getSelectedTower() {
+        return selectedTower;
     }
 }
