@@ -17,6 +17,7 @@ import java.awt.event.MouseEvent;
 public class GamePanel extends JPanel {
     private Game game;
     private JButton restartButton;
+    private TowerInfoPanel towerInfoPanel;
 
     public GamePanel() {
         game = new Game();
@@ -24,6 +25,7 @@ public class GamePanel extends JPanel {
 
         setupMouseListeners();
         setupRestartButton();
+        towerInfoPanel = new TowerInfoPanel();
         restartButton.setVisible(false);
         add(restartButton);
 
@@ -91,16 +93,7 @@ public class GamePanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 game.selectTower(e.getX(), e.getY());
-            }
-        });
-
-        // Example: Upgrade the selected tower with a right-click
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    game.upgradeSelectedTower();
-                }
+                towerInfoPanel.updateTowerInfo(game.getSelectedTower());
             }
         });
     }
@@ -122,5 +115,9 @@ public class GamePanel extends JPanel {
             game.reset();
             restartButton.setVisible(false);
         });
+    }
+
+    public TowerInfoPanel getTowerInfoPanel() {
+        return towerInfoPanel;
     }
 }

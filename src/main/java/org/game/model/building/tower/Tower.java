@@ -126,4 +126,12 @@ public abstract class Tower extends Building {
 
         return distanceSquared <= range * range;
     }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getRange() {
+        return range;
+    }
 }

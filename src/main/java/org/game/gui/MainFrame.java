@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 public class MainFrame extends JFrame {
     private TowerMenu towerMenu;
     private GamePanel gamePanel;
+    private TowerInfoPanel towerInfoPanel;
 
     public MainFrame() {
         setTitle("Tower Defense Game");
@@ -21,8 +22,11 @@ public class MainFrame extends JFrame {
         towerMenu = new TowerMenu();
         gamePanel = new GamePanel();
 
+        towerInfoPanel = gamePanel.getTowerInfoPanel();
+
         add(towerMenu, BorderLayout.WEST);
         add(gamePanel, BorderLayout.CENTER);
+        add(towerInfoPanel, BorderLayout.EAST);
 
         gamePanel.addMouseListener(new MouseAdapter() {
             @Override
