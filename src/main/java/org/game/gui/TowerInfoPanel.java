@@ -1,5 +1,6 @@
 package org.game.gui;
 
+import org.game.Game;
 import org.game.model.building.tower.Tower;
 
 import javax.swing.*;
@@ -14,8 +15,10 @@ public class TowerInfoPanel extends JPanel {
     private JLabel towerDamage;
     private JLabel towerUpgradeCost;
     private JButton upgradeButton;
+    private Game game;
 
-    public TowerInfoPanel() {
+    public TowerInfoPanel(Game game) {
+        this.game = game;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setupUIComponents();
     }
@@ -29,7 +32,10 @@ public class TowerInfoPanel extends JPanel {
 
         upgradeButton.addActionListener(e -> {
             if (selectedTower != null) {
-                selectedTower.upgrade();
+                if(game.getAvailableMoney() >= selectedTower.getUpgradeCost()) {
+                    game.removeFromMoney(selectedTower.getUpgradeCost());
+                    selectedTower.upgrade();
+                }
             }
             updateTowerInfo(selectedTower);
         });

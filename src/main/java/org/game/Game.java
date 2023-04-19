@@ -170,13 +170,6 @@ public class Game {
         selectedTower = null;
     }
 
-    public void upgradeSelectedTower() {
-        if (selectedTower != null && availableMoney >= selectedTower.getUpgradeCost()) {
-            availableMoney -= selectedTower.getUpgradeCost();
-            selectedTower.upgrade();
-        }
-    }
-
     public Tower getSelectedTower() {
         return selectedTower;
     }

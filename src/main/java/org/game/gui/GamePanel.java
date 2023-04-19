@@ -25,7 +25,7 @@ public class GamePanel extends JPanel {
 
         setupMouseListeners();
         setupRestartButton();
-        towerInfoPanel = new TowerInfoPanel();
+        towerInfoPanel = new TowerInfoPanel(game);
         restartButton.setVisible(false);
         add(restartButton);
 
